@@ -1,0 +1,28 @@
+@startuml
+
+database store1
+note bottom
+type: MySql
+datasize: 100kb
+end note
+
+component service1
+note bottom
+type: Quarkus
+request-delay: 100ms
+response-delay: 20ms
+end note
+
+component service2
+note bottom
+type: Go
+replication: 5
+end note
+
+() "HTTP:8080" - [service1]
+[service1] .> () "HTTP/REST"
+() "HTTP/REST" - [service2]
+[service2] .> JDBC
+JDBC - store1
+
+@enduml
