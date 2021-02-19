@@ -1,28 +1,31 @@
 @startuml
 
-database store1
-note bottom
-type: MySql
-datasize: 100kb
-end note
+database "store 1"
+note bottom of "store 1" {
+    type: MySql
+    datasize: 100kb
+}
+JDBC - [store 1]
 
 component service1
-note bottom
-type: Quarkus
-request-delay: 100ms
-response-delay: 20ms
-end note
 
-component service2
-note bottom
-type: Go
-replication: 5
-end note
+note bottom of service1 {
+    variant: Quarkus
+    request-delay: 100ms
+    response-delay: 20ms
+}
 
-() "HTTP:8080" - [service1]
-[service1] .> () "HTTP/REST"
-() "HTTP/REST" - [service2]
-[service2] .> JDBC
-JDBC - store1
+() "HTTP:8080" - service1
+
+
+component "service 2" <<service>>
+note bottom of "service 2" {
+    variant: Go
+    replicas: 5
+}
+() "HTTP/REST" - [service 2]
+
+service1 .> () "HTTP/REST"
+[service 2] .> JDBC
 
 @enduml
