@@ -1,31 +1,26 @@
 @startuml
 
-database "store 1"
+database "store 1" <<database>>
 note bottom of "store 1" {
     type: MySql
     datasize: 100kb
 }
-JDBC - [store 1]
 
-component service1
-
-note bottom of service1 {
-    variant: Quarkus
+component "service 1" <<service>>
+note bottom of "service 1" {
+    type: spring-boot
     request-delay: 100ms
     response-delay: 20ms
 }
 
-() "HTTP:8080" - service1
-
-
 component "service 2" <<service>>
 note bottom of "service 2" {
-    variant: Go
+    type: Go
     replicas: 5
 }
-() "HTTP/REST" - [service 2]
 
-service1 .> () "HTTP/REST"
-[service 2] .> JDBC
+[service 1] -> [service 2]: HTTP/REST
+
+[service 2] -> [store 1]: JDBC
 
 @enduml
