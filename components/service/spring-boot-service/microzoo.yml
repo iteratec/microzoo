@@ -1,0 +1,15 @@
+name: spring-boot
+description: reference service written in java with spring boot
+interfaces:
+  downstream:
+    base:
+      protocol: HTTP/REST
+      port: 8080
+  upstream:
+    base:
+      protocol: HTTP/REST
+  databases:
+    - mysql
+config:
+  request-delay: string
+  response-delay: string
