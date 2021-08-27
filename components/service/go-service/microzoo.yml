@@ -1,0 +1,17 @@
+name: spring-boot
+description: reference service written in java with spring boot
+docker:
+  image: microzoo-spring-boot
+interfaces:
+  downstream:
+    base:
+      protocol: http-rest
+      port: 8080
+  upstream:
+    base:
+      protocol: http-rest
+databases:
+  - mysql
+config:
+  request-delay: string
+  response-delay: string

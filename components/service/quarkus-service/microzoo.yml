@@ -1,0 +1,17 @@
+name: go
+description: reference service written in golang
+docker:
+  image: microzoo-go
+interfaces:
+  downstream:
+    base:
+      protocol: http-rest
+      port: 8080
+  upstream:
+    base:
+      protocol: http-rest
+databases:
+  - mysql
+config:
+  request-delay: string
+  response-delay: string

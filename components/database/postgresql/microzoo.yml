@@ -1,0 +1,14 @@
+name: mysql
+description: MySql database
+constants:
+  userName: root
+  password: root_pw
+  port: 3306
+  db: mysql
+docker:
+  image: mysql:8
+  environment:
+    MYSQL_ROOT_PASSWORD: root_pw
+config:
+  dataSize: string
+

@@ -1,0 +1,27 @@
+@startuml
+
+database "store 1" <<database>>
+note bottom of "store 1" {
+    type: mysql
+    data-size: 100kb
+}
+
+component "service 1" <<service>>
+note bottom of "service 1" {
+    type: spring-boot
+    request-delay: 100ms
+    response-delay: 20ms
+}
+
+component "service 2" <<service>>
+note bottom of "service 2" {
+    type: quarkus
+    replicas: 2
+    response-delay: 20ms
+}
+
+[service 1] -> [service 2]: gRPC
+
+[service 2] -> [store 1]: JDBC
+
+@enduml
