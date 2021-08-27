@@ -13,11 +13,11 @@ note bottom of "myService" {
     response-delay: 20ms
 }
 
-interface "port: 8088"
-interface "port: 5432"
+interface "port: 8080"
+interface "port: 3306"
 
 [myService] -> [myStore]: JDBC
 [port: 8088] -> [myService]: HTTP/REST
-[port: 5432] --> [myStore]: JDBC
+[port: 3306] --> [myStore]: JDBC
 
 @enduml
