@@ -17,7 +17,7 @@ interface "port: 8080"
 interface "port: 3306"
 
 [myService] -> [myStore]: JDBC
-[port: 8088] -> [myService]: HTTP/REST
+[port: 8080] -> [myService]: HTTP/REST
 [port: 3306] --> [myStore]: JDBC
 
 @enduml
