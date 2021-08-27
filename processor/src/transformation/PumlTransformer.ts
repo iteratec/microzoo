@@ -2,6 +2,7 @@ import {PumlComponent, PumlLink, PumlNote, PumlSystem} from "../model/PumlSystem
 import {
     MicrozooDatabase,
     MicrozooDatabaseInterface,
+    MicrozooPort,
     MicrozooService,
     MicrozooSystem,
     MicrozooUpstreamInterface
@@ -11,27 +12,27 @@ import {ComponentType} from "../model/Types";
 export default class PumlTransformer {
     private components: {[name: string]: PumlComponent} = {}
     private notes: {[ref: string]: PumlNote} = {}
-    private links: {[source: string]: PumlLink[]} = {}
+    private upstreamLinks: {[source: string]: PumlLink[]} = {}
+    private downstreamLinks: {[target: string]: PumlLink[]} = {}
 
-    constructor(private puml: PumlSystem) {
+    constructor(private source: string, private puml: PumlSystem) {
         puml.components.forEach(component => this.components[component.name] = component);
         puml.notes.forEach(note => this.notes[note.ref] = note);
         puml.links.forEach(link => this.addLink(link));
     }
 
     private addLink(link: PumlLink): void {
-        const links = this.links[link.source];
+        PumlTransformer.addLink(this.upstreamLinks, link.source, link);
+        PumlTransformer.addLink(this.downstreamLinks, link.target, link);
+    }
 
-        if (!links) {
-            this.links[link.source] = [link]
-        }
-        else {
-            links.push(link);
-        }
+    private static addLink(links: {[source: string]: PumlLink[]}, name: string, link: PumlLink): void {
+        links[name] = [...links[name] || [], link];
     }
 
     public transform(): MicrozooSystem {
         return {
+            name: this.source.replace(/\.puml$/, ""),
             services: this.transformServices(),
             databases: this.transformDatabases()
         };
@@ -45,16 +46,36 @@ export default class PumlTransformer {
 
     private transformService(component: PumlComponent): MicrozooService {
         const note = this.notes[component.name];
-        const links = this.links[component.name] || [];
+        const upstreamLinks = this.upstreamLinks[component.name] || [];
+        const downstreamLinks = this.downstreamLinks[component.name] || [];
 
         return {
+            id: PumlTransformer.idFromName(component.name),
             name: component.name,
             type: note.props["type"],
             config: note.props,
             interfaces: {
-                upstream: this.transformUpstreamInterfaces(links),
-                database: this.transformDatabaseInterfaces(links)
+                ports: this.transformPorts(downstreamLinks),
+                upstream: this.transformUpstreamInterfaces(upstreamLinks),
+                database: this.transformDatabaseInterfaces(upstreamLinks)
             }
+        };
+    }
+
+    private transformPorts(links: PumlLink[]): MicrozooPort[] {
+        return links
+          .filter(link => this.components[link.source].type === ComponentType.INTERFACE)
+          .map(link => this.transformPort(link));
+    }
+
+    private transformPort(link: PumlLink): MicrozooPort {
+        const port = this.components[link.source];
+        const details = port.name.split(":").map(detail => detail.trim());
+        return {
+            name: port.name,
+            targetPort: details[1],
+            sourcePort: details[2],
+            type: link.type
         };
     }
 
@@ -93,11 +114,18 @@ export default class PumlTransformer {
 
     private transformDatabase(component: PumlComponent): MicrozooDatabase {
         const note = this.notes[component.name];
+        const downstreamLinks = this.downstreamLinks[component.name] || [];
 
         return {
+            id: PumlTransformer.idFromName(component.name),
             name: component.name,
             type: note.props["type"],
+            port: this.transformPorts(downstreamLinks)?.[0],
             config: note.props
         };
+    }
+
+    private static idFromName(name: string): string {
+        return name.replace(" ", "_");
     }
 }

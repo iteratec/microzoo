@@ -1,18 +1,22 @@
-package de.elementec.springbootservice.controller;
+package com.iteratec.springbootservice.controller;
 
-import de.elementec.springbootservice.dto.BaseDto;
-import de.elementec.springbootservice.dto.BaseDtoFactory;
+import com.iteratec.springbootservice.dto.BaseDto;
+import com.iteratec.springbootservice.service.BaseService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("api/base")
+@RequiredArgsConstructor
 public class BaseController {
+    @Autowired
+    private BaseService baseService;
+
     @GetMapping
-    List<BaseDto> getAll() {
-        return BaseDtoFactory.createArray(10,10);
+    public Iterable<BaseDto> getAll() {
+        return baseService.getAll();
     }
 }

@@ -1,15 +1,12 @@
-import {MicrozooDeployer} from "../deployment/MicrozooDeployer";
-import {doCompile} from "./compile";
+import {DeployerFactory, MicrozooDeployer} from "../deployment/MicrozooDeployer";
 
-export async function doDeploy(source: string, sourceFolder: string, target: string): Promise<MicrozooDeployer> {
-    let deployer = await doCompile(source, sourceFolder, target)
-    let success = await deployer.deploy();
-    console.log(`- Deployment ${success ? "succeeded" : "failed"}`);
-    success = await deployer.test();
-    console.log(`- Test ${success ? "succeeded" : "failed"}`);
+export async function doDrop(source: string, sourceFolder: string, target: string): Promise<MicrozooDeployer> {
+    const deployer = DeployerFactory.get(target);
+    const success = await deployer.drop();
+    console.log(`- Drop ${success ? "succeeded" : "failed"}`);
     return deployer;
 }
 
-export default async function deploy(source: string, sourceFolder: string, target: string): Promise<void> {
-    await doDeploy(source, sourceFolder, target);
+export default async function drop(source: string, sourceFolder: string, target: string): Promise<void> {
+    await doDrop(source, sourceFolder, target);
 }

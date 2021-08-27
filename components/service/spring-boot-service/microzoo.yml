@@ -1,15 +1,29 @@
 name: spring-boot
 description: reference service written in java with spring boot
+docker:
+  image: microzoo-spring-boot
+  environment:
+    SPRING_PROFILES_ACTIVE: "{{profiles}}"
 interfaces:
   downstream:
     base:
-      protocol: HTTP/REST
+      protocol: http-rest
       port: 8080
   upstream:
     base:
-      protocol: HTTP/REST
-  databases:
-    - mysql
+      protocol: http-rest
+databases:
+  mysql:
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://{{database.id}}:{{manifest.constants.port}}/{{manifest.constants.db}}"
+      SPRING_DATASOURCE_USERNAME: "{{manifest.constants.userName}}"
+      SPRING_DATASOURCE_PASSWORD: "{{manifest.constants.password}}"
+  postgres:
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://{{database.id}}:{{manifest.constants.port}}/{{manifest.constants.db}}"
+      SPRING_DATASOURCE_USERNAME: "{{manifest.constants.userName}}"
+      SPRING_DATASOURCE_PASSWORD: "{{manifest.constants.password}}"
+  default:
 config:
-  request-delay: string
-  response-delay: string
+  requestDelay: string
+  responseDelay: string

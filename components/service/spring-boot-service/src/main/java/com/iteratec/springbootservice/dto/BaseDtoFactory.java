@@ -1,4 +1,4 @@
-package de.elementec.springbootservice.dto;
+package com.iteratec.springbootservice.dto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +14,8 @@ public class BaseDtoFactory {
 
         for (long index = 0; index < size; index++) {
             result.add(BaseDto.builder()
-                    .withId(index)
-                    .withPayload(createRandomString(payloadSize))
+                    .id(index)
+                    .payload(createRandomString(payloadSize))
                     .build());
         }
 

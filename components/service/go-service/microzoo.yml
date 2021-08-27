@@ -1,7 +1,7 @@
-name: spring-boot
-description: reference service written in java with spring boot
+name: go
+description: reference service written in golang
 docker:
-  image: microzoo-spring-boot
+  image: microzoo-go
 interfaces:
   downstream:
     base:
@@ -13,5 +13,5 @@ interfaces:
 databases:
   - mysql
 config:
-  request-delay: string
-  response-delay: string
+  requestDelay: string
+  responseDelay: string

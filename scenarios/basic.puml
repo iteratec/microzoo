@@ -2,8 +2,8 @@
 
 database "store 1" <<database>>
 note bottom of "store 1" {
-    type: MySql
-    datasize: 100kb
+    type: mysql
+    data-size: 100kb
 }
 
 component "service 1" <<service>>
@@ -15,12 +15,16 @@ note bottom of "service 1" {
 
 component "service 2" <<service>>
 note bottom of "service 2" {
-    type: Go
-    replicas: 5
+    type: nodejs
+    response-delay: 20ms
 }
 
-[service 1] -> [service 2]: HTTP/REST
+interface "port: 8080"
+
+[service 1] -> [service 2]: REST/HTTP
 
 [service 2] -> [store 1]: JDBC
+
+[port: 8080] -> [service 1]
 
 @enduml

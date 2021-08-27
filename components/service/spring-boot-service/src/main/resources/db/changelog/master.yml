@@ -1,18 +1,18 @@
 databaseChangeLog:
   - changeSet:
-      id:  1
-      author:  codalf
+      id: 1
+      author: codalf
       changes:
         - createTable:
-          tableName:  base
-          columns:
-            - column:
-              name:  id
-              type:  int
-              autoIncrement:  true
-              constraints:
-                primaryKey:  true
-                nullable:  false
-            - column:
-              name:  payload
-              type:  varchar(500)
+            tableName: base
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: payload
+                  type: varchar(500)

@@ -1,0 +1,15 @@
+name: mysql
+description: MySql database
+constants:
+  userName: root
+  password: root_pw
+  port: 3306
+  db: microzoo
+docker:
+  image: mysql:8
+  environment:
+    MYSQL_ROOT_PASSWORD: root_pw
+    MYSQL_DATABASE: microzoo
+config:
+  dataSize: string
+

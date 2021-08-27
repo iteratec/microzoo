@@ -1,4 +1,5 @@
 export enum ComponentType {
     SERVICE = "service",
-    DATABASE = "database"
+    DATABASE = "database",
+    INTERFACE = "interface"
 }

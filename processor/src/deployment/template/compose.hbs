@@ -1,1 +1,26 @@
-Hello {{message}}!
+version: "3.9"
+services:
+  {{#each services}}
+  {{id}}:
+    container_name: {{../stack}}_{{id}}
+    image: {{image}}
+    {{#if ports}}
+    ports:
+    {{#each ports}}
+      - {{this}}
+    {{/each}}
+    {{/if}}
+    {{#environment}}
+    environment:
+    {{#each .}}
+      {{@key}}: {{this}}
+    {{/each}}
+    {{/environment}}
+    {{#if dependencies}}
+    depends_on:
+    {{#each dependencies}}
+      - {{this}}
+    {{/each}}
+    {{/if}}
+  {{/each}}
+

@@ -1,1 +1,7 @@
+.idea
+
 # Created by .ignore support plugin (hsz.mobi)
+stacks/*
+!stacks/.gitkeep
+scenarios/*
+!scenarios/minimal.puml

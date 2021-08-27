@@ -1,7 +1,8 @@
-name: go
-description: reference service written in golang
+name: quarkus
+description: reference service written with quarkus
+configFile: application.yml
 docker:
-  image: microzoo-go
+  image: microzoo-quarkus
 interfaces:
   downstream:
     base:
@@ -11,7 +12,11 @@ interfaces:
     base:
       protocol: http-rest
 databases:
-  - mysql
+  mysql:
+    environment:
+      QUARKUS_DATASOURCE_URL: "jdbc:mysql://{{database.id}}:{{manifest.constants.port}}/{{manifest.constants.db}}"
+      QUARKUS_DATASOURCE_USERNAME: "{{manifest.constants.userName}}"
+      QUARKUS_DATASOURCE_PASSWORD: "{{manifest.constants.password}}"
 config:
-  request-delay: string
-  response-delay: string
+  requestDelay: string
+  responseDelay: string

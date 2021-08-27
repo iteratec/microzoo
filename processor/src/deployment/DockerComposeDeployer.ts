@@ -1,21 +1,185 @@
 import * as fs from "fs";
-
-import {MicrozooDeployer} from "./MicrozooDeployer";
-import {MicrozooSystem} from "../model/MicrozooSystem";
+const execSh = require("exec-sh").promise;
 const Handlebars = require("handlebars");
 
-export class DockerComposeDeployer implements MicrozooDeployer {
-    private template;
+import {MicrozooDeployer} from "./MicrozooDeployer";
+import {MicrozooDatabase, MicrozooService, MicrozooSystem} from "../model/MicrozooSystem";
+import {ComponentManifest, ManifestRegistry} from "../manifest/ManifestRegistry";
 
-    public constructor(private microzooSystem: MicrozooSystem) {
+interface DockerComposeService {
+    id: string;
+    image: string;
+    ports?: string[];
+    environment: {[key: string]: string};
+    dependencies?: string[];
+}
+
+export class DockerComposeDeployer implements MicrozooDeployer {
+    private readonly template;
+
+    public constructor(private manifestRegistry: ManifestRegistry, private microzooSystem: MicrozooSystem) {
         const templateRaw = fs.readFileSync("./src/deployment/template/compose.hbs").toString();
-        console.log(templateRaw);
         this.template = Handlebars.compile(templateRaw);
     }
 
-    public deploy(): boolean {
-        console.log("Deploying...");
-        console.log(this.template({message: "world"}));
+    public async compile(): Promise<boolean> {
+        this.cleanStack();
+        this.createComposeFile();
         return true;
+    }
+
+    public async deploy(): Promise<boolean> {
+        await this.startDockerCompose();
+        return true;
+    }
+
+    public async drop(): Promise<boolean> {
+        await this.dropDockerCompose();
+        return true;
+    }
+
+    private cleanStack(): void {
+        fs.rmdirSync(`../stacks/${this.microzooSystem.name}/docker-compose`, {recursive: true});
+    }
+
+    private createComposeFile(): void {
+        const composeFile = this.template({services: this.getServices(), stack: this.microzooSystem.name});
+        fs.mkdirSync(`../stacks/${this.microzooSystem.name}/docker-compose`, {recursive: true});
+        fs.writeFileSync(`../stacks/${this.microzooSystem.name}/docker-compose/docker-compose.yml`, composeFile);
+    }
+
+    private getDatabaseByName(name: string): MicrozooDatabase {
+        return this.microzooSystem.databases.find(database => database.name === name);
+    }
+
+    public async test(): Promise<boolean> {
+        await this.execK6();
+        return true;
+    }
+
+    private getServices(): DockerComposeService[] {
+        const services = this.microzooSystem.services.map(service => this.getServiceFromService(service));
+        const databases = this.microzooSystem.databases.map(database => this.getServiceFromDatabase(database));
+        return [...services, ...databases];
+    }
+
+    private getServiceFromService(service: MicrozooService): DockerComposeService {
+        const manifest = this.manifestRegistry.getService(service.type);
+        return {
+            id: service.id,
+            image: manifest.docker.image,
+            ports: DockerComposeDeployer.collectServicePorts(service, manifest),
+            environment: this.getServiceEnvironment(service, manifest),
+            dependencies: this.collectDependencies(service)
+        };
+    }
+
+    private getServiceFromDatabase(database: MicrozooDatabase): DockerComposeService {
+        const manifest = this.manifestRegistry.getDatabase(database.type);
+        return {
+            id: database.id,
+            image: manifest.docker.image,
+            ports: DockerComposeDeployer.collectDatabasePorts(database, manifest),
+            environment: manifest.docker.environment
+        };
+    }
+
+    private static collectServicePorts(service: MicrozooService, manifest: ComponentManifest): string[] {
+        const servicePort = DockerComposeDeployer.getServicePort(manifest);
+
+        if (service.interfaces.ports) {
+            return service.interfaces.ports.map(port => `${port.targetPort}:${port.sourcePort || servicePort}`);
+        }
+    }
+
+    private static collectDatabasePorts(database: MicrozooDatabase, manifest: ComponentManifest): string[] {
+        const databasePort = DockerComposeDeployer.getDatabasePort(manifest);
+
+        if (database.port) {
+            return [`${database.port.targetPort}:${database.port.sourcePort || databasePort}`];
+        }
+    }
+
+    private static getServicePort(manifest: ComponentManifest): string {
+        const ports = Object.values(manifest.interfaces.downstream).map(iface => iface["port"]);
+        for (let port of ports) {
+            if (port) {
+                return port;
+            }
+        }
+    }
+
+    private static getDatabasePort(manifest: ComponentManifest): string {
+        return manifest.constants["port"];
+    }
+
+    private collectDependencies(service: MicrozooService): string[] {
+        if (service.interfaces.database) {
+            const database = this.getDatabaseByName(service.interfaces.database.database);
+            return [database.id];
+        }
+    }
+
+    private static collectProfiles(service: MicrozooService): string {
+        const profiles = [];
+        profiles.push(service.interfaces.database ? "database" : "nodatabase");
+        return profiles.join(",");
+    }
+
+    private getServiceBaseEnvironment(service: MicrozooService, manifest: ComponentManifest): {[key: string]: string} {
+        if (manifest.docker.environment) {
+            const profiles = DockerComposeDeployer.collectProfiles(service);
+            return this.resolveVariables(manifest.docker.environment, {profiles});
+        }
+
+        return {};
+    }
+
+    private getServiceDatabaseEnvironment(service: MicrozooService, manifest: ComponentManifest): {[key: string]: string} {
+        if (service.interfaces.database) {
+            const database = this.getDatabaseByName(service.interfaces.database.database);
+            const databaseManifest = this.manifestRegistry.getDatabase(database.type);
+            const environment = manifest.databases[database.type]?.environment;
+            if (environment) {
+                const variables = {database: database, manifest: databaseManifest};
+                return this.resolveVariables(environment, variables)
+            }
+        }
+
+        return {};
+    }
+
+    private resolveVariables(environment: {[key: string]: string}, variables: object): {[key: string]: string} {
+        const environmentResolved = {};
+
+        Object.keys(environment).forEach(key => {
+            const template = Handlebars.compile(environment[key]);
+            environmentResolved[key] = template(variables);
+        });
+
+        return environmentResolved;
+    }
+
+    private getServiceEnvironment(service: MicrozooService, manifest: ComponentManifest): {[key: string]: string} {
+        let environmentResolved = {
+            ...this.getServiceBaseEnvironment(service, manifest),
+            ...this.getServiceDatabaseEnvironment(service, manifest)
+        };
+
+        if (Object.keys(environmentResolved).length) {
+            return environmentResolved;
+        }
+    }
+
+    private async startDockerCompose(): Promise<void> {
+        return execSh(`docker compose -f ../stacks/${this.microzooSystem.name}/docker-compose/docker-compose.yml up -d`);
+    }
+
+    private async dropDockerCompose(): Promise<void> {
+        return execSh(`docker compose -f ../stacks/${this.microzooSystem.name}/docker-compose/docker-compose.yml down`);
+    }
+
+    private async execK6(): Promise<void> {
+        return execSh(`docker run -i loadimpact/k6 run - <../stacks/${this.microzooSystem.name}/tester/k6/script.js`)
     }
 }

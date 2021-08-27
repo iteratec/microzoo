@@ -29,7 +29,7 @@ export async function doCompile(source: string, sourceFolder: string, target: st
     console.log(`- Validating configs ${success ? "succeeded" : "failed"}`);
     const deployer = DeployerFactory.get(target, manifestRegistry, microzooSystem)
     success = await deployer.compile();
-    console.log(`- Compiling orchestration ${success ? "succeeded" : "failed"}`);
+    console.log(`- Compiling deployment ${success ? "succeeded" : "failed"}`);
     return deployer;
 }
 

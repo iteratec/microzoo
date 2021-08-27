@@ -1,14 +1,14 @@
-name: mysql
-description: MySql database
+name: postgres
+description: PostgreSQL database
 constants:
-  userName: root
+  userName: postgres
   password: root_pw
-  port: 3306
-  db: mysql
+  port: 5432
+  db: postgres
 docker:
-  image: mysql:8
+  image: postgres:13-alpine
   environment:
-    MYSQL_ROOT_PASSWORD: root_pw
+    POSTGRES_PASSWORD: root_pw
 config:
   dataSize: string
 

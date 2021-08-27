@@ -1,11 +1,11 @@
-package de.elementec.springbootservice.dto;
+package com.iteratec.springbootservice.dto;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder(setterPrefix = "with")
+@Builder
 public class BaseDto {
-    Long id;
-    String payload;
+    private Long id;
+    private String payload;
 }

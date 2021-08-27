@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  service_1:
+    container_name: basic_service_1
+    image: microzoo-spring-boot
+  service_2:
+    container_name: basic_service_2
+    image: microzoo-quarkus
+    environment:
+      QUARKUS_DATASOURCE_URL: jdbc:mysql://store_1:3306/mysql
+      QUARKUS_DATASOURCE_USERNAME: root
+      QUARKUS_DATASOURCE_PASSWORD: root_pw
+  store_1:
+    container_name: basic_store_1
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pw
+
