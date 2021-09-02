@@ -3,6 +3,7 @@ import {Command, Option} from 'commander';
 import {DockerComposeDeployer} from "./deployment/DockerComposeDeployer";
 import compile from "./command/compile";
 import deploy from "./command/deploy";
+import test from "./command/test";
 import drop from "./command/drop";
 
 function getSourceFolder(program, options): string {
@@ -33,6 +34,15 @@ function buildDeployCommand(program) {
       });
 }
 
+function buildTestCommand(program) {
+    return new Command('test')
+      .arguments('<source>')
+      .description('compiles, deploys, runs and tests a puml specification')
+      .action((source: string, options) => {
+          test(source, getSourceFolder(program, options), getTarget(program, options))
+            .catch(reason => console.log(reason));
+      });
+}
 function buildDropCommand(program) {
     return new Command('drop')
       .arguments('<source>')
@@ -52,6 +62,7 @@ function start(argv) {
         .choices(["docker-compose"]).default('docker-compose'))
       .addCommand(buildCompileCommand(program))
       .addCommand(buildDeployCommand(program))
+      .addCommand(buildTestCommand(program))
       .addCommand(buildDropCommand(program));
     program.parse(argv);
 }

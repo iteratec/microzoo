@@ -18,11 +18,13 @@ databases:
       SPRING_DATASOURCE_URL: "jdbc:mysql://{{database.id}}:{{manifest.constants.port}}/{{manifest.constants.db}}"
       SPRING_DATASOURCE_USERNAME: "{{manifest.constants.userName}}"
       SPRING_DATASOURCE_PASSWORD: "{{manifest.constants.password}}"
+      WAIT_FOR: "{{database.id}}:{{manifest.constants.port}}"
   postgres:
     environment:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://{{database.id}}:{{manifest.constants.port}}/{{manifest.constants.db}}"
       SPRING_DATASOURCE_USERNAME: "{{manifest.constants.userName}}"
       SPRING_DATASOURCE_PASSWORD: "{{manifest.constants.password}}"
+      WAIT_FOR: "{{database.id}}:{{manifest.constants.port}}"
   default:
 config:
   requestDelay: string

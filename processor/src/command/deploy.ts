@@ -5,8 +5,6 @@ export async function doDeploy(source: string, sourceFolder: string, target: str
     let deployer = await doCompile(source, sourceFolder, target)
     let success = await deployer.deploy();
     console.log(`- Deployment ${success ? "succeeded" : "failed"}`);
-    success = await deployer.test();
-    console.log(`- Test ${success ? "succeeded" : "failed"}`);
     return deployer;
 }
 

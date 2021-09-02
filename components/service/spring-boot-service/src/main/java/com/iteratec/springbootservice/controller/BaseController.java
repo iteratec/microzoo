@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.TimeUnit;
+
 @RestController
 @RequestMapping("api/base")
 @RequiredArgsConstructor
@@ -17,6 +19,22 @@ public class BaseController {
 
     @GetMapping
     public Iterable<BaseDto> getAll() {
-        return baseService.getAll();
+        try {
+            TimeUnit.MILLISECONDS.sleep(5);
+        }
+        catch(InterruptedException exception) {
+            Thread.currentThread().interrupt();
+        }
+
+        Iterable<BaseDto> result = baseService.getAll();
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(10);
+        }
+        catch(InterruptedException exception) {
+            Thread.currentThread().interrupt();
+        }
+
+        return result;
     }
 }

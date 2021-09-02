@@ -172,7 +172,7 @@ export class DockerComposeDeployer implements MicrozooDeployer {
     }
 
     private async startDockerCompose(): Promise<void> {
-        return execSh(`docker compose -f ../stacks/${this.microzooSystem.name}/docker-compose/docker-compose.yml up -d`);
+        return execSh(`docker compose -f ../stacks/${this.microzooSystem.name}/docker-compose/docker-compose.yml up -d --remove-orphans`);
     }
 
     private async dropDockerCompose(): Promise<void> {
@@ -180,6 +180,6 @@ export class DockerComposeDeployer implements MicrozooDeployer {
     }
 
     private async execK6(): Promise<void> {
-        return execSh(`docker run -i loadimpact/k6 run - <../stacks/${this.microzooSystem.name}/tester/k6/script.js`)
+        return execSh(`docker run -i --rm loadimpact/k6 run - <../stacks/${this.microzooSystem.name}/tester/k6/script.js`)
     }
 }

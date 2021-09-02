@@ -9,8 +9,8 @@ note bottom of "myStore" {
 component "myService" <<service>>
 note bottom of "myService" {
     type: spring-boot
-    request-delay: 100ms
-    response-delay: 20ms
+    request-delay: 5ms
+    response-delay: 10ms
 }
 
 interface "port: 8080"
