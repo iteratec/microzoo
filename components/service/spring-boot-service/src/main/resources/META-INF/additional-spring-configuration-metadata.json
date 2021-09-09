@@ -1,0 +1,13 @@
+{
+    "properties": [
+        {
+            "name": "microzoo.request-delay",
+            "type": "java.lang.String",
+            "description": "Time to delay the request to an upstream service. Example: 10ms"
+        },
+        {
+            "name": "microzoo.response-delay",
+            "type": "java.lang.String",
+            "description": "Time to delay the response from an upstream service. Example: 10ms"
+        }
+    ] }

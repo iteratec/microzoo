@@ -14,3 +14,7 @@ spring:
 #      - org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration
 
   liquibase.change-log: classpath:db/changelog/master.yml
+
+microzoo:
+  request-delay: ~
+  response-delay: ~
