@@ -8,6 +8,7 @@ import {
     MicrozooUpstreamInterface
 } from "../model/MicrozooSystem";
 import {ComponentType} from "../model/Types";
+import {StringUtil} from "../common/StringUtil";
 
 export default class PumlTransformer {
     private components: {[name: string]: PumlComponent} = {}
@@ -50,7 +51,7 @@ export default class PumlTransformer {
         const downstreamLinks = this.downstreamLinks[component.name] || [];
 
         return {
-            id: PumlTransformer.idFromName(component.name),
+            id: StringUtil.toId(component.name),
             name: component.name,
             type: note.props["type"],
             config: note.props,
@@ -117,15 +118,11 @@ export default class PumlTransformer {
         const downstreamLinks = this.downstreamLinks[component.name] || [];
 
         return {
-            id: PumlTransformer.idFromName(component.name),
+            id: StringUtil.toId(component.name),
             name: component.name,
             type: note.props["type"],
             port: this.transformPorts(downstreamLinks)?.[0],
             config: note.props
         };
-    }
-
-    private static idFromName(name: string): string {
-        return name.replace(" ", "_");
     }
 }

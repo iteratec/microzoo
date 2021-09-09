@@ -5,6 +5,7 @@ const Handlebars = require("handlebars");
 import {MicrozooDeployer} from "./MicrozooDeployer";
 import {MicrozooDatabase, MicrozooService, MicrozooSystem} from "../model/MicrozooSystem";
 import {ComponentManifest, ManifestRegistry} from "../manifest/ManifestRegistry";
+import {StringUtil} from "../common/StringUtil";
 
 interface DockerComposeService {
     id: string;
@@ -149,6 +150,16 @@ export class DockerComposeDeployer implements MicrozooDeployer {
         return {};
     }
 
+    private getServiceConfigEnvironment(service: MicrozooService): {[key: string]: string} {
+        const environmentConfig = {};
+
+        if (service.config) {
+            Object.keys(service.config).forEach(key => environmentConfig["MICROZOO_" + StringUtil.kebabToSnakeCase(key)] = service.config[key]);
+        }
+
+        return environmentConfig;
+    }
+
     private resolveVariables(environment: {[key: string]: string}, variables: object): {[key: string]: string} {
         const environmentResolved = {};
 
@@ -163,7 +174,8 @@ export class DockerComposeDeployer implements MicrozooDeployer {
     private getServiceEnvironment(service: MicrozooService, manifest: ComponentManifest): {[key: string]: string} {
         let environmentResolved = {
             ...this.getServiceBaseEnvironment(service, manifest),
-            ...this.getServiceDatabaseEnvironment(service, manifest)
+            ...this.getServiceDatabaseEnvironment(service, manifest),
+            ...this.getServiceConfigEnvironment(service)
         };
 
         if (Object.keys(environmentResolved).length) {

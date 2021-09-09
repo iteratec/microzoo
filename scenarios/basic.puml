@@ -25,6 +25,6 @@ interface "port: 8080"
 
 [service 2] -> [store 1]: JDBC
 
-[port: 8080] -> [service 1]
+[port: 8080] -> [service 1]: REST/HTTP
 
 @enduml
