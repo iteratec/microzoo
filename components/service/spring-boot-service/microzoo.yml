@@ -1,7 +1,7 @@
 name: spring-boot
 description: reference service written in java with spring boot
 docker:
-  image: microzoo-spring-boot
+  image: ghcr.io/iteratec/microzoo-spring-boot
   environment:
     SPRING_PROFILES_ACTIVE: "{{profiles}}"
 interfaces:
