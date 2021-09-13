@@ -3,9 +3,10 @@ const execSh = require("exec-sh").promise;
 const Handlebars = require("handlebars");
 
 import {MicrozooDeployer} from "./MicrozooDeployer";
-import {MicrozooDatabase, MicrozooService, MicrozooSystem} from "../model/MicrozooSystem";
+import {MicrozooDatabase, MicrozooService, MicrozooSystem, MicrozooUpstreamInterface} from "../model/MicrozooSystem";
 import {ComponentManifest, ManifestRegistry} from "../manifest/ManifestRegistry";
 import {StringUtil} from "../common/StringUtil";
+import {Mapper} from "../common/Mapper";
 
 interface DockerComposeService {
     id: string;
@@ -40,7 +41,9 @@ export class DockerComposeDeployer implements MicrozooDeployer {
     }
 
     private cleanStack(): void {
-        fs.rmdirSync(`../stacks/${this.microzooSystem.name}/docker-compose`, {recursive: true});
+        if (fs.existsSync(`../stacks/${this.microzooSystem.name}/docker-compose`)) {
+            fs.rmSync(`../stacks/${this.microzooSystem.name}/docker-compose`, {recursive: true});
+        }
     }
 
     private createComposeFile(): void {
@@ -51,6 +54,10 @@ export class DockerComposeDeployer implements MicrozooDeployer {
 
     private getDatabaseByName(name: string): MicrozooDatabase {
         return this.microzooSystem.databases.find(database => database.name === name);
+    }
+
+    private getServiceByName(name: string): MicrozooService {
+        return this.microzooSystem.services.find(service => service.name === name);
     }
 
     public async test(): Promise<boolean> {
@@ -150,6 +157,31 @@ export class DockerComposeDeployer implements MicrozooDeployer {
         return {};
     }
 
+    private getServiceServiceEnvironment(service: MicrozooService): {[key: string]: string} {
+        if (service.interfaces.upstream) {
+            const services = service.interfaces.upstream
+              .map(upstreamInterface => this.getServiceUrl(upstreamInterface));
+
+            return {
+                MICROZOO_UPSTREAMSERVICES: services.join(",")
+            };
+        }
+    }
+
+    private getServiceUrl(upstreamInterface: MicrozooUpstreamInterface): string {
+        const upstreamService = this.getServiceByName(upstreamInterface.service);
+        const manifest = this.manifestRegistry.getService(upstreamService.type);
+        const downstreamInterface = manifest.interfaces.downstream[upstreamInterface.name];
+
+        if (downstreamInterface?.protocol === Mapper.toProtocol(upstreamInterface.type)) {
+            return DockerComposeDeployer.getUrl(downstreamInterface.protocol, upstreamService.id, downstreamInterface.port);
+        }
+    }
+
+    private static getUrl(protocol: string, host: string, port: string): string {
+        return `${Mapper.toUrlProtocol(protocol)}://${host}:${port}`;
+    }
+
     private getServiceConfigEnvironment(service: MicrozooService): {[key: string]: string} {
         const environmentConfig = {};
 
@@ -175,6 +207,7 @@ export class DockerComposeDeployer implements MicrozooDeployer {
         let environmentResolved = {
             ...this.getServiceBaseEnvironment(service, manifest),
             ...this.getServiceDatabaseEnvironment(service, manifest),
+            ...this.getServiceServiceEnvironment(service),
             ...this.getServiceConfigEnvironment(service)
         };
 
@@ -184,11 +217,11 @@ export class DockerComposeDeployer implements MicrozooDeployer {
     }
 
     private async startDockerCompose(): Promise<void> {
-        return execSh(`docker compose -f ../stacks/${this.microzooSystem.name}/docker-compose/docker-compose.yml up -d --remove-orphans`);
+        return execSh(`docker-compose -f ../stacks/${this.microzooSystem.name}/docker-compose/docker-compose.yml up -d --remove-orphans`);
     }
 
     private async dropDockerCompose(): Promise<void> {
-        return execSh(`docker compose -f ../stacks/${this.microzooSystem.name}/docker-compose/docker-compose.yml down`);
+        return execSh(`docker-compose -f ../stacks/${this.microzooSystem.name}/docker-compose/docker-compose.yml down`);
     }
 
     private async execK6(): Promise<void> {

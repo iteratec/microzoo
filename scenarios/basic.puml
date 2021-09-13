@@ -15,16 +15,16 @@ note bottom of "service 1" {
 
 component "service 2" <<service>>
 note bottom of "service 2" {
-    type: nodejs
+    type: spring-boot
     response-delay: 20ms
 }
 
 interface "port: 8080"
 
-[service 1] -> [service 2]: REST/HTTP
+[service 1] -> [service 2]: HTTP/REST
 
 [service 2] -> [store 1]: JDBC
 
-[port: 8080] -> [service 1]: REST/HTTP
+[port: 8080] -> [service 1]: HTTP/REST
 
 @enduml

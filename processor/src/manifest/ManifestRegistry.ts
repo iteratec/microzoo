@@ -18,7 +18,7 @@ export interface ComponentManifest {
         environment: {[key: string]: string};
     };
     interfaces: {
-        downstream: {[name: string]: {protocol: string, environment: {[key: string]: string}}};
+        downstream: {[name: string]: {protocol: string, port: string, environment: {[key: string]: string}}};
         upstream: {[name: string]: {protocol: string, environment: {[key: string]: string}}};
     };
     databases: {[type: string]: {environment: {[key: string]: string}}};
