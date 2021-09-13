@@ -11,4 +11,11 @@ public class MicrozooConfigProperties {
 
     // Time to delay a resonse from an upstream service
     private String responseDelay;
+
+    // URLs of upstream services
+    private String upstreamServices;
+
+    public String[] getUpstreamServicesAsArray() {
+        return upstreamServices.split(",");
+    }
 }

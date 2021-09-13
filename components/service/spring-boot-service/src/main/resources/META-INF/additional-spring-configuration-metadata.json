@@ -9,5 +9,10 @@
             "name": "microzoo.response-delay",
             "type": "java.lang.String",
             "description": "Time to delay the response from an upstream service. Example: 10ms"
+        },
+        {
+            "name": "microzoo.upstream-services",
+            "type": "java.lang.String",
+            "description": "Description for microzoo.upstream-services."
         }
     ] }

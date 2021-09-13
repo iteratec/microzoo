@@ -18,3 +18,4 @@ spring:
 microzoo:
   request-delay: ~
   response-delay: ~
+  upstream-services: ~
