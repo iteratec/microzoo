@@ -18,4 +18,6 @@ spring:
 microzoo:
   request-delay: ~
   response-delay: ~
+  entity-count: 100
+  payload-size: 100
   upstream-services: ~

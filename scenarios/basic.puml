@@ -3,7 +3,6 @@
 database "store 1" <<database>>
 note bottom of "store 1" {
     type: mysql
-    data-size: 100kb
 }
 
 component "service 1" <<service>>
@@ -17,6 +16,7 @@ component "service 2" <<service>>
 note bottom of "service 2" {
     type: spring-boot
     response-delay: 20ms
+    entity-count: 20
 }
 
 interface "port: 8080"

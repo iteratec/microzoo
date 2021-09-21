@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 public class BaseDtoFactory {
+    private static final Random random = new Random();
+
     private BaseDtoFactory() {
         // prevent instantiation
     }
@@ -22,9 +24,8 @@ public class BaseDtoFactory {
         return result;
     }
 
-    private static String createRandomString(int size) {
+    public static String createRandomString(int size) {
         String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!\"§$%&/()=?,;.:-_#+*";
-        Random random = new Random();
         return random.ints(size, 0, alphabet.length())
                 .map(alphabet::charAt)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)

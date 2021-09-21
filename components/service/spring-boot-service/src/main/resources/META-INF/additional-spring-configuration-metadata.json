@@ -13,6 +13,16 @@
         {
             "name": "microzoo.upstream-services",
             "type": "java.lang.String",
-            "description": "Description for microzoo.upstream-services."
+            "description": "Comma-separated list of connected upstream services."
+        },
+        {
+            "name": "microzoo.object-count",
+            "type": "java.lang.Integer",
+            "description": "Number of objects."
+        },
+        {
+            "name": "microzoo.payload-size",
+            "type": "java.lang.Integer",
+            "description": "Payload size in bytes."
         }
     ] }
