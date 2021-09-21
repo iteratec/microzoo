@@ -9,6 +9,3 @@ docker:
   image: postgres:13-alpine
   environment:
     POSTGRES_PASSWORD: root_pw
-config:
-  dataSize: string
-

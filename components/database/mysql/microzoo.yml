@@ -10,6 +10,3 @@ docker:
   environment:
     MYSQL_ROOT_PASSWORD: root_pw
     MYSQL_DATABASE: microzoo
-config:
-  dataSize: string
-

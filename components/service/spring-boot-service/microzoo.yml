@@ -25,7 +25,8 @@ databases:
       SPRING_DATASOURCE_USERNAME: "{{manifest.constants.userName}}"
       SPRING_DATASOURCE_PASSWORD: "{{manifest.constants.password}}"
       WAIT_FOR: "{{database.id}}:{{manifest.constants.port}}"
-  default:
 config:
   requestDelay: string
   responseDelay: string
+  entityCount: number
+  payloadSize: number

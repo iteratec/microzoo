@@ -3,7 +3,6 @@
 database "myStore" <<database>>
 note bottom of "myStore" {
     type: mysql
-    data-size: 100kb
 }
 
 component "myService" <<service>>

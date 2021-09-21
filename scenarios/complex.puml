@@ -1,0 +1,50 @@
+@startuml
+
+database "customer-data" <<database>>
+note bottom of "customer-data" {
+    type: mysql
+    data-size: 100kb
+}
+
+database "order-data" <<database>>
+note bottom of "order-data" {
+    type: postgres
+    data-size: 500kb
+}
+component "bff-service" <<service>>
+note left of "bff-service" {
+    type: spring-boot
+    request-delay: 100ms
+    response-delay: 20ms
+}
+
+component "customer" <<service>>
+note left of "customer" {
+    type: nodejs
+    response-delay: 20ms
+}
+
+component "order" <<service>>
+note right of "order" {
+    type: golang
+    response-delay: 20ms
+}
+
+component "email-gateway" <<service>>
+note bottom of "email-gateway" {
+    type: golang
+    response-delay: 100ms
+}
+
+interface "port: 8080"
+
+[bff-service] --> [customer]: REST/HTTP
+[bff-service] --> [order]: REST/HTTP
+
+[customer] --> [customer-data]: JDBC
+[order] --> [order-data]: JDBC
+[customer] --> [email-gateway]: REST/HHTP
+
+[port: 8080] --> [bff-service]
+
+@enduml
