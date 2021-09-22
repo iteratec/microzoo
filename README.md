@@ -23,7 +23,7 @@ All components can be configured to allow the modelling of real-world scenarios 
 
 Available components:
 - **Service implementations:** Spring Boot
-- **Databases:** MySql, PostgreSql 
+- **Databases:** MySql, PostgreSql, MariaDB
 - **Execution environments**: docker-compose
 
 Installation
