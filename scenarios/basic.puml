@@ -2,7 +2,7 @@
 
 database "store 1" <<database>>
 note bottom of "store 1" {
-    type: mysql
+    type: postgres
 }
 
 component "service 1" <<service>>

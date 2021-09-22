@@ -30,7 +30,8 @@ Installation
 ============
 
 ### Prerequisites
-- Linux shell (Windows: WSL2)
+- Linux environment (Windows: WSL2)
+- Installed git
 - installed docker and docker-compose
 - installed node/npm
 

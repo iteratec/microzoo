@@ -70,13 +70,14 @@ public class BaseService {
 
     public BaseDto create(BaseDto baseDto) {
         if (baseRepository != null) {
-            log.info("Saving entity in repository");
-            Base result = baseRepository.save(BaseMapper.INSTANCE.toBase(baseDto));
+            Base base = BaseMapper.INSTANCE.toBase(baseDto);
+            log.info("Saving entity with id {} in repository", base.getId());
+            Base result = baseRepository.save(base);
             return BaseMapper.INSTANCE.toBaseDto(result);
         }
 
         if (isUpstreamValid()) {
-            log.info("Posting entity to upstream services");
+            log.info("Posting dto with id {} to upstream services", baseDto.getId());
             return postToServices(configProperties.getUpstreamServicesAsArray(), baseDto);
         }
 
@@ -88,6 +89,7 @@ public class BaseService {
 
         for (String service: services) {
             try {
+                log.info("Posting dto with id {} to service {}", baseDto.getId(), service);
                 result = baseClient.create(getServiceUri(service), baseDto);
             }
             catch (URISyntaxException exception) {

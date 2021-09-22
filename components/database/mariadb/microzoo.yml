@@ -1,0 +1,12 @@
+name: mariadb
+description: MariaDb database
+constants:
+  userName: root
+  password: root_pw
+  port: 3306
+  db: microzoo
+docker:
+  image: mariadb:10.5
+  environment:
+    MARIADB_ROOT_PASSWORD: root_pw
+    MARIADB_DATABASE: microzoo
