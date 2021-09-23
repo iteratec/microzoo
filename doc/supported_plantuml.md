@@ -37,5 +37,5 @@ note bottom of "database 1" {
 ````
 The type property is mandatory for services and database and determine which implementation is used for this component.
 The type has to be one of the available component names in the folders *components/database* and *components/service*. 
-Available properties are specified in the corresponding manifest files *microzoo.yml* which resides in each component folder.
+The component names and available properties are specified in the corresponding manifest files *microzoo.yml* which resides in each component folder.
 
