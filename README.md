@@ -27,7 +27,7 @@ Available components:
 - **Execution environments**: docker-compose
 
 Installation
-============
+------------
 
 ### Prerequisites
 - Linux environment (Windows: WSL2)
@@ -41,7 +41,7 @@ Installation
 ````
 
 How to use
-==========
+----------
 
 microzoo stacks are normally specified as [PlantUml component diagrams](https://plantuml.com/en/component-diagram):
 
@@ -90,7 +90,7 @@ or monitored with [Prometheus](https://prometheus.io/) and [Grafana](https://gra
 these and other tools will be added to microzoo soon.
 
 Getting started
-===============
+---------------
 
 1. In the folder *scenarios* add a puml-file *my-architecture.puml* with your stack.
    See the [supported PlantUml syntax](doc/supported_plantuml.md).
@@ -100,7 +100,7 @@ Getting started
 For details see [microzoo CLI](doc/microzoo_cli.md)
 
 How to extend
-=============
+-------------
 
 microzoo is extensible in various ways:
 
@@ -114,7 +114,7 @@ as minimal requirement.
 See the [microzoo extension guide](doc/extension_guide.md) for details.
 
 License
-=======
+-------
 
 Copyright 2021 Peter Kullmann, [iteratec GmbH](https://www.iteratec.com)
 
