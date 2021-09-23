@@ -34,6 +34,7 @@ Installation
 - Installed git
 - installed docker and docker-compose
 - installed node/npm
+- PlantUML Editor/Viewer (optional)
 
 ````
     git clone https://github.com/iteratec/microzoo.git
