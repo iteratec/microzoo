@@ -3,17 +3,17 @@ microzoo
 
 ![microzoo-logo.png](./doc/images/microzoo-logo.png)
 
-microzoo is an exploration and testing environment for microservice technologies and architectures with focus on
+microzoo is an experimental kit for exploring and testing microservice technologies and architectures with focus on
 simplicity and ease-of-use. microzoo may well serve as a tool
 
-- to test and evaluate microservice technologies such as frameworks and stacks
+- to test and evaluate microservice technologies such as different frameworks and stacks
 - to create a test setup for evaluation of microservice hosting environments
 - for teaching and learning
 
 microzoo consists of a library of
 
 - a standard microservice implemented with different languages and frameworks (currently spring boot)
-- persistence components (currently MySql and Postgres)
+- persistence components (currently MySql, Postgres and MariaDB)
 - microservice infrastructure components (not yet included)
 
 All components can be configured to allow the modelling of real-world scenarios to a certain degree.
