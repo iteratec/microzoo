@@ -93,6 +93,7 @@ these and other tools will be added to microzoo soon.
 Getting started
 ---------------
 
+0. Install microzoo as described in section *Installation*
 1. In the folder *scenarios* add a puml-file *my-architecture.puml* with your stack.
    See the [supported PlantUml syntax](doc/supported_plantuml.md).
 2. Run `bin/microzoo deploy my-architecture`
