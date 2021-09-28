@@ -6,7 +6,7 @@ import com.iteratec.springbootservice.dto.BaseDto;
 import com.iteratec.springbootservice.dto.BaseDtoFactory;
 import com.iteratec.springbootservice.entity.Base;
 import com.iteratec.springbootservice.mapper.BaseMapper;
-import com.iteratec.springbootservice.repository.BaseRepository;
+import com.iteratec.springbootservice.repository.BaseRepositoryProxy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,19 +14,20 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @Service
 @Slf4j
 public class BaseService {
-    @Autowired(required = false)
-    private BaseRepository baseRepository;
+    private final BaseRepositoryProxy baseRepositoryProxy;
+    private final BaseClient baseClient;
+    private final MicrozooConfigProperties configProperties;
 
     @Autowired(required = false)
-    private BaseClient baseClient;
-
-    @Autowired
-    private MicrozooConfigProperties configProperties;
+    BaseService(BaseRepositoryProxy baseRepositoryProxy, BaseClient baseClient, MicrozooConfigProperties configProperties) {
+        this.baseRepositoryProxy = baseRepositoryProxy;
+        this.baseClient = baseClient;
+        this.configProperties = configProperties;
+    }
 
     private boolean isUpstreamValid() {
         return baseClient != null && configProperties.getUpstreamServices() != null;
@@ -37,9 +38,9 @@ public class BaseService {
     }
 
     public Iterable<BaseDto> getAll() {
-        if (baseRepository != null) {
+        if (baseRepositoryProxy.getRepository() != null) {
             log.info("Fetching entities from repository");
-            return BaseMapper.INSTANCE.toBaseDtos(baseRepository.findAll());
+            return BaseMapper.INSTANCE.toBaseDtos(baseRepositoryProxy.getRepository().findAll());
         }
 
        if (isUpstreamValid()) {
@@ -69,10 +70,10 @@ public class BaseService {
     }
 
     public BaseDto create(BaseDto baseDto) {
-        if (baseRepository != null) {
+        if (baseRepositoryProxy.getRepository() != null) {
             Base base = BaseMapper.INSTANCE.toBase(baseDto);
             log.info("Saving entity with id {} in repository", base.getId());
-            Base result = baseRepository.save(base);
+            Base result = baseRepositoryProxy.getRepository().save(base);
             return BaseMapper.INSTANCE.toBaseDto(result);
         }
 

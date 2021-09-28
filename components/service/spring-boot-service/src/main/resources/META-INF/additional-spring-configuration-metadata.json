@@ -24,5 +24,20 @@
             "name": "microzoo.payload-size",
             "type": "java.lang.Integer",
             "description": "Payload size in bytes."
+        },
+        {
+            "name": "microzoo.mongodb.dbname",
+            "type": "java.lang.String",
+            "description": "MongoDb database name."
+        },
+        {
+            "name": "microzoo.mongodb.host",
+            "type": "java.lang.String",
+            "description": "MongoDb host."
+        },
+        {
+            "name": "microzoo.mongodb.port",
+            "type": "java.lang.String",
+            "description": "MongoDb port."
         }
     ] }

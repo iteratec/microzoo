@@ -1,4 +1,4 @@
-package com.iteratec.springbootservice.repository;
+package com.iteratec.springbootservice.repository.jdbc;
 
 import com.iteratec.springbootservice.entity.Base;
 import org.springframework.data.repository.CrudRepository;

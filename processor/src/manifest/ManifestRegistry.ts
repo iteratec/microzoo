@@ -21,7 +21,7 @@ export interface ComponentManifest {
         downstream: {[name: string]: {protocol: string, port: string, environment: {[key: string]: string}}};
         upstream: {[name: string]: {protocol: string, environment: {[key: string]: string}}};
     };
-    databases: {[type: string]: {environment: {[key: string]: string}}};
+    databases: {[type: string]: {environment: {[key: string]: string}, profile?: string}};
     config: {[name: string]: string | number | boolean};
 }
 

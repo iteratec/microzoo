@@ -6,6 +6,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "microzoo")
 @Data
 public class MicrozooConfigProperties {
+    @Data
+    static class MongoDbConfigProperties {
+        private String host;
+        private String port;
+        private String dbname;
+    }
+
+
     // Time to delay a request to an upstream service
     private String requestDelay;
 
@@ -19,7 +27,13 @@ public class MicrozooConfigProperties {
 
     private Integer payloadSize;
 
+    private MongoDbConfigProperties mongodb;
+
     public String[] getUpstreamServicesAsArray() {
         return upstreamServices.split(",");
+    }
+
+    public boolean isValid(String configValue) {
+        return configValue != null && !configValue.isEmpty();
     }
 }

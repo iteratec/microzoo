@@ -2,7 +2,7 @@
 
 database "myStore" <<database>>
 note bottom of "myStore" {
-    type: mysql
+    type: mongodb
 }
 
 component "myService" <<service>>

@@ -19,12 +19,28 @@ databases:
       SPRING_DATASOURCE_USERNAME: "{{manifest.constants.userName}}"
       SPRING_DATASOURCE_PASSWORD: "{{manifest.constants.password}}"
       WAIT_FOR: "{{database.id}}:{{manifest.constants.port}}"
+    profile: jdbc
+  mariadb:
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mariadb://{{database.id}}:{{manifest.constants.port}}/{{manifest.constants.db}}"
+      SPRING_DATASOURCE_USERNAME: "{{manifest.constants.userName}}"
+      SPRING_DATASOURCE_PASSWORD: "{{manifest.constants.password}}"
+      WAIT_FOR: "{{database.id}}:{{manifest.constants.port}}"
+    profile: jdbc
   postgres:
     environment:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://{{database.id}}:{{manifest.constants.port}}/{{manifest.constants.db}}"
       SPRING_DATASOURCE_USERNAME: "{{manifest.constants.userName}}"
       SPRING_DATASOURCE_PASSWORD: "{{manifest.constants.password}}"
       WAIT_FOR: "{{database.id}}:{{manifest.constants.port}}"
+    profile: jdbc
+  mongodb:
+    environment:
+      MICROZOO_MONGODB_HOST: "{{database.id}}"
+      MICROZOO_MONGODB_PORT: "{{manifest.constants.port}}"
+      MICROZOO_MONGODB_DBNAME: "{{manifest.constants.db}}"
+      WAIT_FOR: "{{database.id}}:{{manifest.constants.port}}"
+    profile: mongodb
 config:
   requestDelay: string
   responseDelay: string

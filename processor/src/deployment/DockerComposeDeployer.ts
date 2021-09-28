@@ -128,15 +128,26 @@ export class DockerComposeDeployer implements MicrozooDeployer {
         }
     }
 
-    private static collectProfiles(service: MicrozooService): string {
+    private collectProfiles(service: MicrozooService, manifest: ComponentManifest): string {
         const profiles = [];
-        profiles.push(service.interfaces.database ? "database" : "nodatabase");
+
+        if (service.interfaces.database) {
+            const database = this.getDatabaseByName(service.interfaces.database.database);
+            const profile = manifest.databases[database.type]?.profile;
+            if (profile) {
+                profiles.push(profile);
+            }
+        }
+        else {
+            profiles.push("nodatabase");
+        }
+
         return profiles.join(",");
     }
 
     private getServiceBaseEnvironment(service: MicrozooService, manifest: ComponentManifest): {[key: string]: string} {
         if (manifest.docker.environment) {
-            const profiles = DockerComposeDeployer.collectProfiles(service);
+            const profiles = this.collectProfiles(service, manifest);
             return this.resolveVariables(manifest.docker.environment, {profiles});
         }
 

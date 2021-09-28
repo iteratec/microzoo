@@ -1,0 +1,11 @@
+name: mongodb
+description: MongoDb database
+constants:
+  userName: root
+  password: root_pw
+  port: 27017
+  db: microzoo
+docker:
+  image: mongo:5.0
+  environment:
+    MONGO_INITDB_DATABASE: microzoo
