@@ -22,8 +22,8 @@ The name must be of the form `port: n`, where n is a port number.
 
 ### Connections and dependencies
 ````
-[myService] -> [myStore]: JDBC
-[port: 8080] -> [myService]: HTTP/REST
+[service 1] -> [database 1]: JDBC
+[port: 8080] -> [service 1]: HTTP/REST
 ````
 Components can be connected by using the arrow notation. Instead of `->`, other line styles such as `.>` or `-->` may also be used.
 A protocol specification such as `JDBC` or `HTTP/REST` is also required.
