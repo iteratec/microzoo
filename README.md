@@ -12,8 +12,8 @@ simplicity and ease-of-use. microzoo may well serve as a tool
 
 microzoo consists of a library of
 
-- a standard microservice implemented with different languages and frameworks (currently spring boot)
-- persistence components (currently MySql, Postgres and MariaDB)
+- a standard microservice implemented with different languages and frameworks (currently Spring Boot)
+- persistence components (currently MySql, Postgres, MariaDB and MongoDB)
 - microservice infrastructure components (not yet included)
 
 All components can be configured to allow the modelling of real-world scenarios to a certain degree.
@@ -23,7 +23,7 @@ All components can be configured to allow the modelling of real-world scenarios 
 
 Available components:
 - **Service implementations:** Spring Boot
-- **Databases:** MySql, PostgreSql, MariaDB
+- **Databases:** MySql, PostgreSql, MariaDB, MongoDB
 - **Execution environments**: docker-compose
 
 Installation
