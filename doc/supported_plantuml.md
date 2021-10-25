@@ -22,8 +22,8 @@ The name must be of the form `port: n`, where n is a port number.
 
 ### Connections and dependencies
 ````
-[myService] -> [myStore]: JDBC
-[port: 8080] -> [myService]: HTTP/REST
+[service 1] -> [database 1]: JDBC
+[port: 8080] -> [service 1]: HTTP/REST
 ````
 Components can be connected by using the arrow notation. Instead of `->`, other line styles such as `.>` or `-->` may also be used.
 A protocol specification such as `JDBC` or `HTTP/REST` is also required.
@@ -39,3 +39,12 @@ The type property is mandatory for services and database and determine which imp
 The type has to be one of the available component names in the folders *components/database* and *components/service*. 
 The component names and available properties are specified in the corresponding manifest files *microzoo.yml* which resides in each component folder.
 
+### Supported properties
+
+#### spring-boot
+| Property | Datatype | Example | Description |
+| -------- | -------- | ------- | ----------- |
+| request-delay | string | 10ms, 2s | A delay, before a request is passed to a subsequent service or the database in milliseconds (ms) or seconds (s) |
+| response-delay | string | 10ms, 2s | A delay, after a request is passed to a subsequent service or the database in milliseconds (ms) or seconds (s) |
+| entity-count | number | 1000 | Number of entities, either stored in a connected database or generated |
+| payload-size | number | 200 | Payload size in bytes. The payload contents are a generated random string |
