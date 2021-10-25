@@ -24,7 +24,7 @@ All components can be configured to allow the modelling of real-world scenarios 
 Available components:
 - **Service implementations:** Spring Boot
 - **Databases:** MySql, PostgreSql, MariaDB, MongoDB
-- **Execution environments**: docker-compose
+- **Execution environments**: docker-compose, kubernetes
 
 Installation
 ------------
@@ -32,7 +32,8 @@ Installation
 ### Prerequisites
 - Linux environment (Windows: WSL2)
 - Installed git
-- installed docker and docker-compose
+- Installed docker and docker-compose (optional)
+- Installed kubectl (optional)
 - installed node/npm
 - PlantUML Editor/Viewer (optional)
 
@@ -96,7 +97,7 @@ Getting started
 0. Install microzoo as described in section *Installation*
 1. In the folder *scenarios* add a puml-file *my-architecture.puml* with your stack.
    See the [supported PlantUml syntax](doc/supported_plantuml.md).
-2. Run `bin/microzoo deploy my-architecture`
+2. Run `bin/microzoo deploy my-architecture` (use -t kubernetes to deploy via kubectl)
 3. Copy *stacks/basic/tester* to *stacks/my-architecture/tester* and run `bin/microzoo test my-architecture` (Integrated support for tests will be added)
 
 For details see [microzoo CLI](doc/microzoo_cli.md)

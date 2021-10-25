@@ -4,7 +4,7 @@ export class Mapper {
     }
 
     public static toId(name: string): string {
-        return name.replace(" ", "");
+        return name.toLowerCase().replace(" ", "");
     }
 
     public static toProtocol(type: string): string {

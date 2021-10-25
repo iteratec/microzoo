@@ -1,6 +1,7 @@
 import {DeployerFactory} from "./deployment/MicrozooDeployer";
 import {Command, Option} from 'commander';
 import {DockerComposeDeployer} from "./deployment/DockerComposeDeployer";
+import {KubernetesDeployer} from "./deployment/KubernetesDeployer";
 import compile from "./command/compile";
 import deploy from "./command/deploy";
 import test from "./command/test";
@@ -59,7 +60,7 @@ function start(argv) {
       .version('0.9.0', '-v, --version', 'output the current version')
       .option('-s, --source-folder <folder>', 'set the source folder', '../scenarios')
       .addOption(new Option('-t, --target <type>', 'set the target system')
-        .choices(["docker-compose"]).default('docker-compose'))
+        .choices(["docker-compose", "kubernetes"]).default('docker-compose'))
       .addCommand(buildCompileCommand(program))
       .addCommand(buildDeployCommand(program))
       .addCommand(buildTestCommand(program))
@@ -69,6 +70,7 @@ function start(argv) {
 
 try {
     DeployerFactory.register("docker-compose", DockerComposeDeployer);
+    DeployerFactory.register("kubernetes", KubernetesDeployer);
     start(process.argv);
 }
 catch(error) {

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+{{#service}}
+metadata:
+  labels:
+    microzoo.service: {{id}}
+  name: {{id}}-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      microzoo.service: {{id}}
+  template:
+    metadata:
+      labels:
+        microzoo.service: {{id}}
+    spec:
+      containers:
+        - image: {{image}}
+          name: {{id}}
+          {{#environment}}
+          env:
+          {{#each .}}
+          - name: {{@key}}
+            value: "{{this}}"
+          {{/each}}
+          {{/environment}}
+          {{#if ports}}
+          ports:
+          {{#each ports}}
+            - containerPort: {{sourcePort}}
+          {{/each}}
+          {{/if}}
+      restartPolicy: Always
+{{/service}}

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+{{#service}}
+metadata:
+  creationTimestamp: null
+  labels:
+    microzoo.service: {{id}}
+  name: {{id}}
+spec:
+  {{#if ports}}
+  ports:
+  {{#each ports}}
+    - name: "port{{sourcePort}}"
+      port: {{sourcePort}}
+  {{/each}}
+  {{/if}}
+  selector:
+    microzoo.service: {{id}}
+status:
+  loadBalancer: {}
+{{/service}}

@@ -2,7 +2,7 @@
 
 if [ -z $WAIT_FOR ];
 then
-  java -jar app/app.jar
+  exec java -jar app/app.jar
 else
-  ./wait-for $WAIT_FOR -t 30 -- java -jar app/app.jar
+  exec ./wait-for $WAIT_FOR -t 30 -- java -jar app/app.jar
 fi
