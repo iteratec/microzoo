@@ -1,47 +1,59 @@
-#Supported PlantUml syntax
+# Supported PlantUml syntax
 
 microzoo currently supports following PlanUml elements:
 
-### services
-````
+## services
+
+````plantuml
 component "service 1" <<service>>
 ````
+
 The name of a service can be freely chosen and is used for referencing a service. Services must have the stereotype `<<service>>`
 
-### databases
-````
+## databases
+
+````plantuml
 database "database 1" <<database>>
 ````
-The name of a database can be freely chosen and is used for referencing a database. Databases must have the stereotype `<<service>>`
 
-### Port mappings
-````
+The name of a database can be freely chosen and is used for referencing a database. Databases must have the stereotype `<<database>>`
+
+## Port mappings
+
+````plantuml
 interface "port: 8080"
 ````
+
 The name must be of the form `port: n`, where n is a port number.
 
-### Connections and dependencies
-````
+## Connections and dependencies
+
+````plantuml
 [service 1] -> [database 1]: JDBC
 [port: 8080] -> [service 1]: HTTP/REST
 ````
+
 Components can be connected by using the arrow notation. Instead of `->`, other line styles such as `.>` or `-->` may also be used.
 A protocol specification such as `JDBC` or `HTTP/REST` is also required.
 
-### Note blocks
+## Note blocks
+
 Notes are used for setting certain component properties. Some properties are mandatory, others are optional.
-````
+
+````plantuml
 note bottom of "database 1" {
     type: mysql
 }
 ````
+
 The type property is mandatory for services and database and determine which implementation is used for this component.
 The type has to be one of the available component names in the folders *components/database* and *components/service*. 
 The component names and available properties are specified in the corresponding manifest files *microzoo.yml* which resides in each component folder.
 
-### Supported properties
+## Supported properties
 
-#### spring-boot
+### spring-boot
+
 | Property | Datatype | Example | Description |
 | -------- | -------- | ------- | ----------- |
 | request-delay | string | 10ms, 2s | A delay, before a request is passed to a subsequent service or the database in milliseconds (ms) or seconds (s) |

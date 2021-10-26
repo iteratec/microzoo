@@ -1,5 +1,4 @@
-microzoo
-========
+# microzoo
 
 ![microzoo-logo.png](./doc/images/microzoo-logo.png)
 
@@ -27,8 +26,7 @@ Available components:
 - **Databases:** MySql, PostgreSql, MariaDB, MongoDB
 - **Execution environments**: docker-compose, kubernetes
 
-Installation
-------------
+## Installation
 
 ### Prerequisites
 
@@ -44,8 +42,7 @@ Installation
     cd processor && npm install
 ````
 
-How to use
-----------
+## How to use
 
 microzoo stacks are normally specified as [PlantUml component diagrams](https://plantuml.com/en/component-diagram):
 
@@ -93,8 +90,7 @@ The running system can be tested using [K6](https://k6.io/), observed with [port
 or monitored with [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/). Integrated support for
 these and other tools will be added to microzoo soon.
 
-Getting started
----------------
+## Getting started
 
 0. Install microzoo as described in section *Installation*
 1. In the folder *scenarios* add a puml-file *my-architecture.puml* with your stack.
@@ -104,8 +100,7 @@ Getting started
 
 For details see [microzoo CLI](doc/microzoo_cli.md)
 
-How to extend
--------------
+## How to extend
 
 microzoo is extensible in various ways:
 
@@ -118,8 +113,7 @@ as minimal requirement.
 
 See the [microzoo extension guide](doc/extension_guide.md) for details.
 
-License
--------
+## License
 
 Copyright 2021 Peter Kullmann, [iteratec GmbH](https://www.iteratec.com)
 
