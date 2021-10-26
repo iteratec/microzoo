@@ -22,6 +22,7 @@ All components can be configured to allow the modelling of real-world scenarios 
 > All parts of the system may change over time and we are constantly adding new features. Please check back frequently. 
 
 Available components:
+
 - **Service implementations:** Spring Boot
 - **Databases:** MySql, PostgreSql, MariaDB, MongoDB
 - **Execution environments**: docker-compose, kubernetes
@@ -30,6 +31,7 @@ Installation
 ------------
 
 ### Prerequisites
+
 - Linux environment (Windows: WSL2)
 - Installed git
 - Installed docker and docker-compose (optional)
@@ -37,7 +39,7 @@ Installation
 - installed node/npm
 - PlantUML Editor/Viewer (optional)
 
-````
+````bash
     git clone https://github.com/iteratec/microzoo.git
     cd processor && npm install
 ````
@@ -51,7 +53,7 @@ microzoo stacks are normally specified as [PlantUml component diagrams](https://
 
 PlantUml uses a textual representation and can generate a UML visualization from it:
 
-````
+````plantuml
 @startuml
 
 database "store 1" <<database>>
