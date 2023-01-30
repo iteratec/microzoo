@@ -1,3 +1,6 @@
+This project is no longer maintained.
+The main contributor has created a fork here: https://github.com/codalf/microzoo?organization=codalf&organization=codalf
+
 # microzoo
 
 ![microzoo-logo.png](./doc/images/microzoo-logo.png)
